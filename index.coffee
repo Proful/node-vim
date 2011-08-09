@@ -13,6 +13,13 @@ child = exec script,(error,stdout,stderr)->
     console.log '~/.gvimrc ==> ~/.gvimrc.old'
     console.log '~/.vim ==> ~/.vim.old'
 
-# Create ~/.vim folder
-# Create ~/.vim/autoload folder
-
+    # Create ~/.vim folder
+    # Create ~/.vim/autoload folder
+    # TODO: just given default mode 0777. Not sure much.
+    # I think 777 gives read,write and execute access to the user
+    # Looks like node does not support creating folder with relative path. '~/.vim'
+    # I got error: Error: ENOENT, No such file or directory '~/.vim'
+    fs.mkdirSync process.env.HOME + '/.vim',0777
+    console.log 'Created .vim folder'
+    fs.mkdirSync process.env.HOME + '/.vim/autoload',0777
+    console.log 'Created .vim/autoload folder'
