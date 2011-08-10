@@ -32,6 +32,7 @@ rmIfExists "#{home}/.vimrc.old"
 rmIfExists "#{home}/.gvimrc.old"
 rmIfExists "#{home}/.vim.old"
 
+
 # backup .vim directory if already available
 # used the following script from janus.
 script = "for i in ~/.vim ~/.vimrc ~/.gvimrc; do [ -e $i ] && mv $i $i.old; done"
@@ -56,10 +57,17 @@ child = exec script,(error,stdout,stderr)->
     fs.mkdirSync home + '/.vim/autoload',0777
     console.log 'Created .vim/autoload folder'
 
-    script = "curl https://raw.github.com/tpope/vim-pathogen/HEAD/autoload/pathogen.vim > #{home}/.vim/autoload/pathogen.vim"
-    console.log 'Running ' + script
-    child = exec script,(error,stdout,stderr)->
-      if error is not null
-        console.log 'Error while downloading pathogen.vim ' + error
-      else
-        console.log 'pathogen.vim copied to ~/.vim/autoload '
+    # Retrieving pathogen.vim file
+    options = {
+      host: 'raw.github.com',
+      port: 443,
+      path: '/tpope/vim-pathogen/HEAD/autoload/pathogen.vim'
+    }
+
+    # Retrieving pathogen.vim file and saving in .vim/autoload
+    https.get options, (res)->
+      res.on 'data',(d)->
+      fd = fs.openSync "#{home}/.vim/autoload/pathogen.vim", 'w'
+      fs.writeSync fd, d.toString()
+      fs.closeSync fd
+      console.log 'pathogen.vim copied to ~/.vim/autoload '
