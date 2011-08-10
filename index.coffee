@@ -1,6 +1,9 @@
 fs = require('fs')
 exec = require('child_process').exec
 path = require('path')
+util = require('util')
+https = require('https')
+
 
 home = process.env.HOME
 
@@ -8,10 +11,10 @@ home = process.env.HOME
 # From rimraf logic
 rmnedirSync = (p)->
   s = fs.lstatSync(p)
-  if not s.isDirectory() 
+  if not s.isDirectory()
     fs.unlinkSync(p)
   else
-    fs.readdirSync(p).forEach (f) -> 
+    fs.readdirSync(p).forEach (f) ->
       rmnedirSync(path.join(p, f))
     fs.rmdirSync(p)
 
@@ -31,6 +34,7 @@ rmIfExists = (filePath)->
 rmIfExists "#{home}/.vimrc.old"
 rmIfExists "#{home}/.gvimrc.old"
 rmIfExists "#{home}/.vim.old"
+rmIfExists "#{home}/.backup"
 
 
 # backup .vim directory if already available
@@ -56,6 +60,11 @@ child = exec script,(error,stdout,stderr)->
     console.log 'Created .vim folder'
     fs.mkdirSync home + '/.vim/autoload',0777
     console.log 'Created .vim/autoload folder'
+    fs.mkdirSync home + '/.vim/bundle',0777
+    console.log 'Created .vim/bundle folder'
+    fs.mkdirSync home + '/.backup',0777
+    console.log 'Created .backup folder'
+
 
     # Retrieving pathogen.vim file
     options = {
@@ -67,7 +76,27 @@ child = exec script,(error,stdout,stderr)->
     # Retrieving pathogen.vim file and saving in .vim/autoload
     https.get options, (res)->
       res.on 'data',(d)->
-      fd = fs.openSync "#{home}/.vim/autoload/pathogen.vim", 'w'
-      fs.writeSync fd, d.toString()
-      fs.closeSync fd
-      console.log 'pathogen.vim copied to ~/.vim/autoload '
+        fs.writeFileSync "#{home}/.vim/autoload/pathogen.vim", d.toString()
+        console.log 'pathogen.vim copied to ~/.vim/autoload '
+
+
+    # Reading all the git plugin and cloning under .vim/bundle folder
+    config = fs.readFileSync "config.json"
+    configJson = JSON.parse(config)
+    for plugin in configJson["plugin"]
+      console.log "Cloning #{plugin['git']}"
+      script = "cd #{home}/.vim/bundle && git clone #{plugin['git']}"
+      child = exec script,(error,stdout,stderr)->
+        if error is not null
+          console.log "git cloning failed : #{error}" 
+        else
+          console.log "git cloning successful"
+
+    # copying .vimrc files to ~/.vimrc
+    fs.readFile ".vimrc",(err,buf)->
+      if(err)
+        console.log "Error reading .vimrc file"
+      else
+        fs.writeFileSync "#{home}/.vimrc",buf
+        console.log ".vimrc file successfully copied to #{home} directory"
+      

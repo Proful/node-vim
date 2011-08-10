@@ -1,14 +1,14 @@
-https = require 'https'
 fs = require 'fs'
+exec = require('child_process').exec
 
-options = {
-  host: 'raw.github.com',
-  port: 443,
-  path: '/tpope/vim-pathogen/HEAD/autoload/pathogen.vim'
-}
-
-https.get options, (res)->
-  res.on 'data',(d)->
-    fd = fs.openSync 'pathogen.vim', 'w'
-    fs.writeSync fd, d.toString()
-    fs.closeSync fd
+home = process.env.HOME
+config = fs.readFileSync "config.json"
+configJson = JSON.parse(config)
+for plugin in configJson["plugin"]
+  console.log "Cloning #{plugin['git']}"
+  script = "cd #{home}/.vim/bundle && git clone #{plugin['git']}"
+  child = exec script,(error,stdout,stderr)->
+    if error is not null
+      console.log "git cloning failed : #{error}" 
+    else
+      console.log "git cloning successful"
