@@ -33,3 +33,7 @@ map <C-S-tab> gT
 map tt :NERDTreeToggle<cr>
 nmap <Space> <C-w><C-w>				                    	" switching between windows..
 colorscheme molokai
+" set guioptions-=m                                   " remove menubar
+set guioptions-=T                                   " remove toolbar
+set guioptions-=r                                   " remove right-hand scrollbar
+set guioptions-=L                                   " remove left-hand scrollbar
