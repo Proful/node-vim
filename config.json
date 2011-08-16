@@ -7,6 +7,8 @@
     {"git":"git://github.com/tpope/vim-markdown.git"},
     {"git":"git://github.com/Raimondi/delimitMate.git"},
     {"git":"git://github.com/tpope/vim-vividchalk.git"},
-    {"git":"git://github.com/tomasr/molokai.git"}
+    {"git":"git://github.com/tomasr/molokai.git"},
+    {"git":"git://github.com/godlygeek/tabular.git"},
+    {"git":"git://github.com/juvenn/mustache.vim.git"}
   ]
 }
