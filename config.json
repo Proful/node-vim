@@ -9,6 +9,8 @@
     {"git":"git://github.com/tpope/vim-vividchalk.git"},
     {"git":"git://github.com/tomasr/molokai.git"},
     {"git":"git://github.com/godlygeek/tabular.git"},
-    {"git":"git://github.com/juvenn/mustache.vim.git"}
+    {"git":"git://github.com/juvenn/mustache.vim.git"},
+    {"git":"git://github.com/digitaltoad/vim-jade.git"},
+    {"git":"git://github.com/nono/vim-handlebars.git"}
   ]
 }

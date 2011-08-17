@@ -26,14 +26,17 @@ set mousehide						                            " hide mouse when typing
 set backup
 set backupdir=~/.backup
 set history=200
+set gfn=Monaco:h18                                  " Monaco usage is not good it will only work on mac
 map Y y$						                                " yank from cursor to end of line
 imap jj <Esc>						                            " map jj to escape
 map <C-tab> gt						                          " control tab for switching tab
 map <C-S-tab> gT
 map tt :NERDTreeToggle<cr>
+map ff :NERDTreeFind<cr>
 nmap <Space> <C-w><C-w>				                    	" switching between windows..
 colorscheme molokai
 " set guioptions-=m                                   " remove menubar
 set guioptions-=T                                   " remove toolbar
 set guioptions-=r                                   " remove right-hand scrollbar
 set guioptions-=L                                   " remove left-hand scrollbar
+au TabEnter :NERDTreeFind<cr>                       " find nerdtree folder for the current file
