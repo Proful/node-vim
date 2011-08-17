@@ -25,8 +25,9 @@ set mouse=a						                              " enable mouse support
 set mousehide						                            " hide mouse when typing
 set backup
 set backupdir=~/.backup
+set directory=~/.backup                              " move the .swp files into backup directory
 set history=200
-set gfn=Monaco:h18                                  " Monaco usage is not good it will only work on mac
+" set gfn=Monaco:h18                                  " Monaco usage is not good it will only work on mac
 map Y y$						                                " yank from cursor to end of line
 imap jj <Esc>						                            " map jj to escape
 map <C-tab> gt						                          " control tab for switching tab
